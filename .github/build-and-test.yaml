@@ -1,0 +1,37 @@
+name: Build and Test VCard Services
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore dependencies
+        run: |
+          for project in $(find . -name "*.csproj"); do
+            dotnet restore $project
+          done
+
+      - name: Build
+        run: |
+          for project in $(find . -name "*.csproj" -not -path "*/Tests/*"); do
+            dotnet build $project --no-restore --configuration Release
+          done
+
+      - name: Test
+        run: |
+          for test_project in $(find . -name "*Tests*.csproj"); do
+            dotnet test $test_project --no-build --verbosity normal
+          done
