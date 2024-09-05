@@ -1,0 +1,56 @@
+# Ignore NuGet packages
+*.nuget.props
+*.nuget.targets
+packages/
+
+# Ignore build output
+obj/
+bin/
+
+# Ignore user-specific files
+*.suo
+*.user
+*.userprefs
+*.vscode/
+
+# Ignore build artifacts and logs
+*.dll
+*.exe
+*.pdb
+*.log
+
+# Ignore Visual Studio files
+*.vs/
+*.vscode/
+*.suo
+*.csproj.user
+
+# Ignore macOS specific files
+.DS_Store
+
+# Ignore editor specific files
+*~
+*.swp
+*.swo
+
+# Ignore local configuration files
+appsettings.Development.json
+appsettings.Production.json
+
+# Ignore sensitive or environment-specific information
+appsettings.json
+appsettings.*.json
+secrets.json
+
+# Ignore publish profile
+*.pubxml
+
+# Ignore IIS Express configuration
+.vs/config/applicationhost.config
+
+# Ignore Node.js dependencies
+node_modules/
+
+# Ignore volumes
+volumes/
+containers/

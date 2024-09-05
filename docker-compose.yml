@@ -1,0 +1,22 @@
+services:
+  vcard.users.api:
+    image: ${DOCKER_REGISTRY-}vcardusersapi
+    container_name: VCard.Users.Api
+    build:
+      context: .
+      dockerfile: src/Services/Users/VCard.Users.Api/Dockerfile
+    ports:
+      - 5000:8080
+      - 5001:8081
+  
+  vcard.postgres.db:
+    image: postgres
+    container_name: VCard.Postgres.Db
+    environment:
+      POSTGRES_USER: vcard
+      POSTGRES_PASSWORD: vcard
+      POSTGRES_DB: vcard
+    volumes:
+      - ./containers/vcard.postgres.db/data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
