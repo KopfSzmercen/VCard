@@ -22,6 +22,18 @@ services:
       - 5000:8080
       - 5001:8081
   
+  vcard.communication.api:
+    image: ${DOCKER_REGISTRY-}vcardcommunicationapi
+    container_name: VCard.Communication.Api
+    build:
+      context: .
+      dockerfile: src/Services/Communication/VCard.Communication.Api/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8083
+    ports:
+      - 5004:8084
+      - 5005:8085
+  
   vcard.postgres.db:
     image: postgres
     container_name: VCard.Postgres.Db
