@@ -23,8 +23,8 @@ internal class GetMeEndpoint : IEndpoint
     {
         var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext!.User);
 
-        return TypedResults.Ok(new Response(user!.Email!));
+        return TypedResults.Ok(new Response(user!.Email!, user.UserName!));
     }
 
-    public sealed record Response(string Email);
+    public sealed record Response(string Email, string Username);
 }
