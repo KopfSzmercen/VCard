@@ -1,4 +1,17 @@
 services:
+
+  vcard.api.gateway:
+    image: ${DOCKER_REGISTRY-}vcardapigateway
+    container_name: VCard.Api.Gateway
+    build:
+      context: .
+      dockerfile: src/VCard.ApiGateway/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8082
+    ports:
+      - 5002:8082
+      - 5003:8083
+  
   vcard.users.api:
     image: ${DOCKER_REGISTRY-}vcardusersapi
     container_name: VCard.Users.Api

@@ -26,7 +26,6 @@ app.UseHttpsRedirection();
 
 app.AddUsersEndpoint();
 
-
 await app.ApplyMigrations();
 
 app.UseAuthentication();
