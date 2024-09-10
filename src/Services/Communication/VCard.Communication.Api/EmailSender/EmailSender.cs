@@ -1,6 +1,9 @@
-﻿namespace VCard.Communication.Api.EmailSender;
+﻿using Microsoft.Extensions.Options;
 
-internal sealed class EmailSender(EmailSenderConfiguration configuration, Logger<EmailSender> logger)
+namespace VCard.Communication.Api.EmailSender;
+
+internal sealed class EmailSender(IOptions<EmailSenderConfiguration> configuration, ILogger<EmailSender> logger)
+    : IEmailSender
 {
     public Task SendEmailAsync(string email, string subject, string message)
     {
@@ -9,7 +12,7 @@ internal sealed class EmailSender(EmailSenderConfiguration configuration, Logger
             email,
             subject,
             message,
-            configuration.SenderName
+            configuration.Value.SenderName
         );
 
         return Task.CompletedTask;

@@ -23,8 +23,8 @@ services:
       RESHARPER_LOG_CONF: "/etc/opt/rider-debugger/backend-log.xml"
     image: "vcardapigateway:dev"
     ports:
-    - "127.0.0.1:57016:57100"
-    - "127.0.0.1:57216:57300"
+    - "127.0.0.1:57012:57100"
+    - "127.0.0.1:57212:57300"
     volumes:
     - "C:\\Users\\albsz\\.nuget\\packages:/home/app/.nuget/packages"
     - "D:\\c# learning\\VCard\\src\\VCard.ApiGateway:/app:rw"
@@ -33,7 +33,7 @@ services:
       Linux64:/opt/rider-debugger"
     - "D:\\JetBrains Rider 2023.1\\bin:/etc/opt/rider-debugger/backend-log.xml"
     - "C:\\Users\\albsz\\AppData\\Local\\JetBrains\\Rider2024.2\\log\\DebuggerWorker\\\
-      JetBrains.Debugger.Worker.2024_9_06_21_44_37:/var/opt/rider-debugger:rw"
+      JetBrains.Debugger.Worker.2024_9_10_21_26_44:/var/opt/rider-debugger:rw"
     working_dir: "/app"
   vcard.communication.api:
     build:
@@ -58,8 +58,8 @@ services:
       RESHARPER_LOG_CONF: "/etc/opt/rider-debugger/backend-log.xml"
     image: "vcardcommunicationapi:dev"
     ports:
-    - "127.0.0.1:57017:57100"
-    - "127.0.0.1:57217:57300"
+    - "127.0.0.1:57013:57100"
+    - "127.0.0.1:57213:57300"
     volumes:
     - "C:\\Users\\albsz\\.nuget\\packages:/home/app/.nuget/packages"
     - "D:\\c# learning\\VCard\\src\\Services\\Communication\\VCard.Communication.Api:/app:rw"
@@ -68,7 +68,7 @@ services:
       Linux64:/opt/rider-debugger"
     - "D:\\JetBrains Rider 2023.1\\bin:/etc/opt/rider-debugger/backend-log.xml"
     - "C:\\Users\\albsz\\AppData\\Local\\JetBrains\\Rider2024.2\\log\\DebuggerWorker\\\
-      JetBrains.Debugger.Worker.2024_9_06_21_44_37:/var/opt/rider-debugger:rw"
+      JetBrains.Debugger.Worker.2024_9_10_21_26_44:/var/opt/rider-debugger:rw"
     working_dir: "/app"
   vcard.users.api:
     build:
@@ -93,8 +93,8 @@ services:
       RESHARPER_LOG_CONF: "/etc/opt/rider-debugger/backend-log.xml"
     image: "vcardusersapi:dev"
     ports:
-    - "127.0.0.1:57018:57100"
-    - "127.0.0.1:57218:57300"
+    - "127.0.0.1:57014:57100"
+    - "127.0.0.1:57214:57300"
     volumes:
     - "C:\\Users\\albsz\\.nuget\\packages:/home/app/.nuget/packages"
     - "D:\\c# learning\\VCard\\src\\Services\\Users\\VCard.Users.Api:/app:rw"
@@ -103,5 +103,5 @@ services:
       Linux64:/opt/rider-debugger"
     - "D:\\JetBrains Rider 2023.1\\bin:/etc/opt/rider-debugger/backend-log.xml"
     - "C:\\Users\\albsz\\AppData\\Local\\JetBrains\\Rider2024.2\\log\\DebuggerWorker\\\
-      JetBrains.Debugger.Worker.2024_9_06_21_44_37:/var/opt/rider-debugger:rw"
+      JetBrains.Debugger.Worker.2024_9_10_21_26_44:/var/opt/rider-debugger:rw"
     working_dir: "/app"
