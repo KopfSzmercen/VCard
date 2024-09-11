@@ -30,9 +30,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="appsettings.IntegrationTests.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
+        <None Remove="appsettings.IntegrationTests.json"/>
+        <Content Include="appsettings.IntegrationTests.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>
