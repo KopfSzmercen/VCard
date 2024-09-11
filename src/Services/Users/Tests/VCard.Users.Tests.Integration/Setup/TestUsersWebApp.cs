@@ -38,7 +38,7 @@ public class UserIntegrationTestsBase : IAsyncLifetime
                 services.AddDbContext<AppDbContext>(options => { options.UseNpgsql(databaseConnectionString); });
             });
 
-            builder.ConfigureAppConfiguration(configurationBuilder =>
+            builder.ConfigureAppConfiguration((_, configurationBuilder) =>
             {
                 var configurationPath = Path.Combine(Directory.GetCurrentDirectory(),
                     "appsettings.IntegrationTests.json");
