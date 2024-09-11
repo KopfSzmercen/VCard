@@ -29,4 +29,10 @@
         <ProjectReference Include="..\..\VCard.Users.Api\VCard.Users.Api.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Update="appsettings.IntegrationTests.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
 </Project>

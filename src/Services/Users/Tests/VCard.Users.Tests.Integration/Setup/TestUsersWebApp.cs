@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VCard.Users.Api.Persistence;
 
@@ -35,6 +36,14 @@ public class UserIntegrationTestsBase : IAsyncLifetime
                 );
 
                 services.AddDbContext<AppDbContext>(options => { options.UseNpgsql(databaseConnectionString); });
+            });
+
+            builder.ConfigureAppConfiguration(configurationBuilder =>
+            {
+                var configurationPath = Path.Combine(Directory.GetCurrentDirectory(),
+                    "appsettings.IntegrationTests.json");
+
+                configurationBuilder.AddJsonFile(configurationPath);
             });
         }
     }
