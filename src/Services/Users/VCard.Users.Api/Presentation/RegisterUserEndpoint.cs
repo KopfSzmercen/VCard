@@ -3,9 +3,11 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using VCard.Common.Application.EventBus;
 using VCard.Common.Presentation.Endpoints;
 using VCard.Users.Api.Auth;
 using VCard.Users.Api.Persistence;
+using VCard.Users.IntegrationEvents;
 
 namespace VCard.Users.Api.Presentation;
 
@@ -24,7 +26,8 @@ internal class RegisterUserEndpoint : IEndpoint
     > Handle(
         [FromServices] UserManager<User> userManager,
         [FromServices] AppDbContext dbContext,
-        [FromBody] Request request
+        [FromBody] Request request,
+        [FromServices] IEventBus eventBus
     )
     {
         await using var transaction = await dbContext.Database.BeginTransactionAsync();
@@ -33,6 +36,14 @@ internal class RegisterUserEndpoint : IEndpoint
         {
             var result = await TryRegisterUser(request, userManager);
             await transaction.CommitAsync();
+
+            await eventBus.PublishAsync(new UserRegistered
+            {
+                UserEmail = request.Email,
+                Id = Guid.NewGuid(),
+                OccurredOn = DateTimeOffset.Now
+            });
+
             return result;
         }
         catch

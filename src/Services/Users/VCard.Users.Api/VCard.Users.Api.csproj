@@ -29,7 +29,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\Common\VCard.Common.Application\VCard.Common.Application.csproj"/>
+        <ProjectReference Include="..\..\..\Common\VCard.Common.Infrastructure\VCard.Common.Infrastructure.csproj"/>
         <ProjectReference Include="..\..\..\Common\VCard.Common.Presentation\VCard.Common.Presentation.csproj"/>
+        <ProjectReference Include="..\VCard.Users.IntegrationEvents\VCard.Users.IntegrationEvents.csproj"/>
     </ItemGroup>
 
 </Project>

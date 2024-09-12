@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VCard.Users.Api.Persistence;
 
@@ -28,6 +29,15 @@ public class UserIntegrationTestsBase : IAsyncLifetime
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            builder.ConfigureAppConfiguration((ctx, configurationBuilder) =>
+            {
+                var configurationPath = Path.Combine(Directory.GetCurrentDirectory(),
+                    "appsettings.IntegrationTests.json");
+
+                configurationBuilder.AddJsonFile(configurationPath);
+            });
+
+
             builder.ConfigureTestServices(services =>
             {
                 services.Remove(

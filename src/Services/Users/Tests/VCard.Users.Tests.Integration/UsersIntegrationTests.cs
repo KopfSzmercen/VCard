@@ -1,9 +1,11 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
+using MassTransit.Testing;
 using VCard.Users.Api.Presentation;
+using VCard.Users.IntegrationEvents;
 using VCard.Users.Tests.Integration.Setup;
+using VCard.Common.Infrastructure.Consumers;
 
 
 namespace VCard.Users.Tests.Integration;
@@ -14,7 +16,11 @@ public class UsersIntegrationTests : UserIntegrationTestsBase
     public async Task GivenEmailIsUnique_RegisterUser_ShouldSucceed()
     {
         // Arrange
-        var client = App.CreateClient();
+        var app = App.WithTestEventBus(
+            typeof(IntegrationEventConsumer<UserRegistered>)
+        );
+
+        var client = app.CreateClient();
 
         var request = new RegisterUserEndpoint.Request
         {
@@ -27,13 +33,17 @@ public class UsersIntegrationTests : UserIntegrationTestsBase
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        var testHarness = app.Services.GetTestHarness();
+
+        testHarness.Consumed.Select<UserRegistered>().Any().Should().BeTrue();
+        testHarness.Published.Select<UserRegistered>().Any().Should().BeTrue();
     }
 
     [Fact]
     public async Task GivenValidSignInWithCookie_UserShouldAccessProtectedRoute()
     {
         // Arrange
-        var client = App.CreateClient();
+        var client = App.WithTestEventBus().CreateClient();
 
         var request = new RegisterUserEndpoint.Request
         {
@@ -66,7 +76,7 @@ public class UsersIntegrationTests : UserIntegrationTestsBase
     public async Task GivenValidSignInWithJwt_UserShouldAccessProtectedRoute()
     {
         // Arrange
-        var client = App.CreateClient();
+        var client = App.WithTestEventBus().CreateClient();
 
         var request = new RegisterUserEndpoint.Request
         {

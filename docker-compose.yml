@@ -45,3 +45,18 @@ services:
       - ./containers/vcard.postgres.db/data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+  
+  vcard.rabbitmq:
+    image: rabbitmq:management-alpine
+    container_name: VCard.RabbitMQ
+    hostname: vcard-rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./containers/vcard.rabbitmq/data:/var/lib/rabbitmq
+      - ./containers/vcard.rabbitmq/logs:/var/log/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: vcard
+      RABBITMQ_DEFAULT_PASS: vcard
+      RABBITMQ_DEFAULT_VHOST: vcard
