@@ -29,6 +29,15 @@ public class UserIntegrationTestsBase : IAsyncLifetime
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            builder.ConfigureAppConfiguration((ctx, configurationBuilder) =>
+            {
+                var configurationPath = Path.Combine(Directory.GetCurrentDirectory(),
+                    "appsettings.IntegrationTests.json");
+
+                configurationBuilder.AddJsonFile(configurationPath);
+            });
+
+
             builder.ConfigureTestServices(services =>
             {
                 services.Remove(
@@ -36,14 +45,6 @@ public class UserIntegrationTestsBase : IAsyncLifetime
                 );
 
                 services.AddDbContext<AppDbContext>(options => { options.UseNpgsql(databaseConnectionString); });
-            });
-
-            builder.ConfigureAppConfiguration((_, configurationBuilder) =>
-            {
-                var configurationPath = Path.Combine(Directory.GetCurrentDirectory(),
-                    "appsettings.IntegrationTests.json");
-
-                configurationBuilder.AddJsonFile(configurationPath);
             });
         }
     }
