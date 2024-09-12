@@ -19,7 +19,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<VCard.Users.Api.Program>(in
 builder.Services.AddEventBusWithTransport(
     [ConsumersRegistry.ConfigureConsumers],
     "Users",
-    builder.Configuration.GetRequiredSection("RabbitMq").Get<RabbitMqConfiguration>()!
+    builder.Configuration.GetSection("RabbitMq").Get<RabbitMqConfiguration>()!
 );
 
 var app = builder.Build();
