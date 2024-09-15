@@ -35,7 +35,6 @@ internal class RegisterUserEndpoint : IEndpoint
         try
         {
             var result = await TryRegisterUser(request, userManager);
-            await transaction.CommitAsync();
 
             await eventBus.PublishAsync(new UserRegistered
             {
@@ -43,6 +42,9 @@ internal class RegisterUserEndpoint : IEndpoint
                 Id = Guid.NewGuid(),
                 OccurredOn = DateTimeOffset.Now
             });
+
+            await dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
 
             return result;
         }

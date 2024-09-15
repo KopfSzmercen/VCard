@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using VCard.Users.Api.Auth;
@@ -21,5 +22,9 @@ internal sealed class AppDbContext(DbContextOptions<AppDbContext> options) :
         base.OnModelCreating(builder);
 
         builder.HasDefaultSchema("users");
+
+        builder.AddInboxStateEntity();
+        builder.AddOutboxMessageEntity();
+        builder.AddOutboxStateEntity();
     }
 }

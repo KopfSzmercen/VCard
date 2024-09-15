@@ -16,10 +16,11 @@ builder.Services.AddPersistence(builder.Configuration);
 
 builder.Services.AddValidatorsFromAssemblyContaining<VCard.Users.Api.Program>(includeInternalTypes: true);
 
-builder.Services.AddEventBusWithTransport(
+builder.Services.AddEventBusWithTransport<AppDbContext>(
     [ConsumersRegistry.ConfigureConsumers],
     "Users",
-    builder.Configuration.GetSection("RabbitMq").Get<RabbitMqConfiguration>()!
+    builder.Configuration.GetSection("RabbitMq").Get<RabbitMqConfiguration>()!,
+    true
 );
 
 var app = builder.Build();

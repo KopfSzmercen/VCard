@@ -1,20 +1,23 @@
 ﻿using System.Reflection;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using VCard.Common.Application.EventBus;
+using VCard.Common.Infrastructure.Outbox;
 
 namespace VCard.Common.Infrastructure;
 
 public static class InfrastructureExtensions
 {
-    public static IServiceCollection AddEventBusWithTransport(
+    public static IServiceCollection AddEventBusWithTransport<TDbContext>(
         this IServiceCollection services,
         Action<IRegistrationConfigurator, string>[] serviceConfigureConsumers,
         string serviceName,
-        RabbitMqConfiguration rabbitMqConfiguration
-    )
+        RabbitMqConfiguration rabbitMqConfiguration,
+        bool useOutbox = false
+    ) where TDbContext : DbContext
     {
-        services.AddSingleton<IEventBus, EventBus.EventBus>();
+        services.AddScoped<IEventBus, EventBus.EventBus>();
 
         services.AddMassTransit(configure =>
         {
@@ -35,10 +38,30 @@ public static class InfrastructureExtensions
                 });
 
                 cfg.ConfigureEndpoints(context);
+
+                cfg.ReceiveEndpoint();
             });
+
+            //Check if db context is not the default one
+            if (useOutbox && typeof(TDbContext) != typeof(DbContext)) configure.ConfigureOutbox<TDbContext>();
         });
 
         return services;
+    }
+
+    public static IServiceCollection AddEventBusWithTransport(
+        this IServiceCollection services,
+        Action<IRegistrationConfigurator, string>[] serviceConfigureConsumers,
+        string serviceName,
+        RabbitMqConfiguration rabbitMqConfiguration
+    )
+    {
+        return AddEventBusWithTransport<DbContext>(
+            services,
+            serviceConfigureConsumers,
+            serviceName,
+            rabbitMqConfiguration
+        );
     }
 
     public static IServiceCollection RegisterIntegrationEventsHandlers(
