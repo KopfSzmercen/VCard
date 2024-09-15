@@ -3,7 +3,7 @@ using VCard.Common.Application.EventBus;
 
 namespace VCard.Common.Infrastructure.EventBus;
 
-internal sealed class EventBus(IBus bus) : IEventBus
+internal sealed class EventBus(IPublishEndpoint bus) : IEventBus
 {
     public async Task PublishAsync<T>(T @event, CancellationToken cancellationToken = default)
         where T : IIntegrationEvent
