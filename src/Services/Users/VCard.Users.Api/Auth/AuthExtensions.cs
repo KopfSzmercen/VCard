@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using VCard.Users.Api.Auth.Tokens;
 using VCard.Users.Api.Persistence;
@@ -12,6 +13,8 @@ internal static class AuthExtensions
 {
     public static void AddAuth(this IServiceCollection services)
     {
+        services.ConfigureOptions<JwtTokensOptionsSetup>();
+
         services.AddSingleton<ITokensManager, TokensManager>();
 
         services.AddAuthorization();
@@ -48,12 +51,15 @@ internal static class AuthExtensions
             })
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
+                var provider = services.BuildServiceProvider();
+
+                var jwtOptions = provider.GetRequiredService<IOptions<JwtTokensOptions>>().Value;
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(TokensManager.Secret)),
-                    RequireAudience = false,
-                    ValidateAudience = false,
-                    ValidateIssuer = false
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtOptions.SigningKey)),
+                    ValidAudience = jwtOptions.Audience,
+                    ValidIssuer = jwtOptions.Issuer
                 };
             })
             .AddCookie(IdentityConstants.ApplicationScheme, options =>

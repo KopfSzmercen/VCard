@@ -10,7 +10,6 @@ services:
       - ASPNETCORE_URLS=http://+:8082
     ports:
       - 5002:8082
-      - 5003:8083
   
   vcard.users.api:
     image: ${DOCKER_REGISTRY-}vcardusersapi
@@ -20,7 +19,6 @@ services:
       dockerfile: src/Services/Users/VCard.Users.Api/Dockerfile
     ports:
       - 5000:8080
-      - 5001:8081
   
   vcard.communication.api:
     image: ${DOCKER_REGISTRY-}vcardcommunicationapi
@@ -31,8 +29,18 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:8083
     ports:
-      - 5004:8084
-      - 5005:8085
+      - 5004:8083
+  
+  vcard.cards.api:
+    image: ${DOCKER_REGISTRY-}vcardcardsapi
+    container_name: VCard.Cards.Api
+    build:
+      context: .
+      dockerfile: src/Services/Cards/VCard.Cards.Api/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8084
+    ports:
+      - 5006:8084
   
   vcard.postgres.db:
     image: postgres
