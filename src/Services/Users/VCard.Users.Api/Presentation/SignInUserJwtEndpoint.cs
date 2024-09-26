@@ -51,7 +51,8 @@ internal sealed class SignInUserJwtEndpoint : IEndpoint
         var token = tokensManager.CreateToken(
             user.Id,
             userRoles.ToList(),
-            claims: userClaims.ToList()
+            //Temporary solution to add ManageCards claim
+            [..userClaims.ToList(), new Claim("ManageCards", true.ToString())]
         );
 
         return TypedResults.Ok(new Response(token.AccessToken));
