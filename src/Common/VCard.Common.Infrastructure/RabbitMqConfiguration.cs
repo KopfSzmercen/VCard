@@ -7,4 +7,6 @@ public sealed class RabbitMqConfiguration
     public string Username { get; set; }
 
     public string Password { get; set; }
+
+    public const string SectionName = "RabbitMq";
 }

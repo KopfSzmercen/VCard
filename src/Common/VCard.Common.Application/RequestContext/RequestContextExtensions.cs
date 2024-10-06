@@ -11,11 +11,13 @@ public static class RequestContextExtensions
 
     public static IApplicationBuilder UseRequestContext(this IApplicationBuilder app)
     {
-        app.Use((ctx, next) =>
+        app.Use(async (ctx, next) =>
         {
             var requestContextAccessor = ctx.RequestServices.GetRequiredService<RequestContextAccessor>();
             requestContextAccessor.Context = new RequestContext(ctx);
-            return next();
+            await next();
+
+            requestContextAccessor.Context = null;
         });
         return app;
     }
