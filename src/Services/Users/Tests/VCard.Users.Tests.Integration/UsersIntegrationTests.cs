@@ -32,7 +32,7 @@ public class UsersIntegrationTests : UserIntegrationTestsBase
         var response = await client.PostAsJsonAsync(UsersEndpoints.BaseUrl, request);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
         var testHarness = app.Services.GetTestHarness();
 
         testHarness.Consumed.Select<UserRegistered>().Any().Should().BeTrue();
