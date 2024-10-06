@@ -22,7 +22,7 @@ internal class RegisterUserEndpoint : IEndpoint
 
     private static async Task<
         Results
-        <BadRequest<ApiErrorResponse>, NoContent>
+        <BadRequest<ApiErrorResponse>, Ok<Guid>>
     > Handle(
         [FromServices] UserManager<User> userManager,
         [FromServices] AppDbContext dbContext,
@@ -36,17 +36,24 @@ internal class RegisterUserEndpoint : IEndpoint
         {
             var result = await TryRegisterUser(request, userManager);
 
+            if (!result.IsSuccess)
+            {
+                await transaction.RollbackAsync();
+                return TypedResults.BadRequest(result.Error!);
+            }
+
             await eventBus.PublishAsync(new UserRegistered
             {
                 UserEmail = request.Email,
                 Id = Guid.NewGuid(),
-                OccurredOn = DateTimeOffset.Now
+                OccurredOn = DateTimeOffset.Now,
+                UserId = result.UserId!.Value
             });
 
             await dbContext.SaveChangesAsync();
             await transaction.CommitAsync();
 
-            return result;
+            return TypedResults.Ok(result.UserId!.Value);
         }
         catch
         {
@@ -55,13 +62,14 @@ internal class RegisterUserEndpoint : IEndpoint
         }
     }
 
-    private static async Task<Results<BadRequest<ApiErrorResponse>, NoContent>> TryRegisterUser(Request request,
+    private static async Task<RegisterUserResult> TryRegisterUser(Request request,
         UserManager<User> userManager)
     {
         var user = new User
         {
             Email = request.Email,
-            UserName = request.Email
+            UserName = request.Email,
+            Id = Guid.NewGuid()
         };
 
         var createUserResult = await userManager.CreateAsync(user, request.Password);
@@ -71,13 +79,21 @@ internal class RegisterUserEndpoint : IEndpoint
             var error = createUserResult.Errors
                 .First();
 
-            return TypedResults.BadRequest(new ApiErrorResponse(error.Code, error.Description));
+            return new RegisterUserResult(new ApiErrorResponse(error.Code, error.Description), null);
         }
 
         await userManager.AddToRolesAsync(user, [UserRole.User]);
         await userManager.AddClaimsAsync(user, [new Claim("id", user.Id.ToString())]);
 
-        return TypedResults.NoContent();
+        return new RegisterUserResult(null, user.Id);
+    }
+
+    private sealed record RegisterUserResult(
+        ApiErrorResponse? Error,
+        Guid? UserId
+    )
+    {
+        public bool IsSuccess => Error is null;
     }
 
     public class Request

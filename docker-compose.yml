@@ -68,3 +68,22 @@ services:
       RABBITMQ_DEFAULT_USER: vcard
       RABBITMQ_DEFAULT_PASS: vcard
       RABBITMQ_DEFAULT_VHOST: vcard
+  
+  vcard.eventstoredb:
+    image: eventstore/eventstore:24.2.0-jammy
+    environment:
+      - EVENTSTORE_CLUSTER_SIZE=1
+      - EVENTSTORE_RUN_PROJECTIONS=All
+      - EVENTSTORE_START_STANDARD_PROJECTIONS=true
+      - EVENTSTORE_HTTP_PORT=2113
+      - EVENTSTORE_INSECURE=true
+      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
+    ports:
+      - 2113:2113
+    volumes:
+      - eventstore-volume-data:/var/lib/eventstore
+      - eventstore-volume-logs:/var/log/eventstore
+volumes:
+  eventstore-volume-data:
+  eventstore-volume-logs:
+  
