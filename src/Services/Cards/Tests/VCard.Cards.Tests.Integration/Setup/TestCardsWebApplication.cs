@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using VCard.Cards.Api.EventStore;
 using VCard.Cards.Api.Persistence;
 using VCard.Common.Auth;
@@ -29,10 +30,10 @@ public class TestCardsWebApplication : WebApplicationFactory<Program>, IAsyncLif
             configurationBuilder.AddJsonFile(configurationPath);
 
             //add event store configuration
-            // configurationBuilder.AddInMemoryCollection(new Dictionary<string, string>
-            // {
-            //     { "EventStore:ConnectionString", _eventStoreDbContainer.ConnectionString },
-            // }!);
+            configurationBuilder.AddInMemoryCollection(new Dictionary<string, string>
+            {
+                { "EventStore:ConnectionString", _eventStoreDbContainer.ConnectionString },
+            }!);
         });
 
         var configuration = new ConfigurationBuilder()
@@ -60,13 +61,25 @@ public class TestCardsWebApplication : WebApplicationFactory<Program>, IAsyncLif
                 configure.UsingInMemory((context, cfg) => { cfg.ConfigureEndpoints(context); });
             });
 
-            Console.WriteLine("JWT CONFIGURATION INTEGRATION TESTS");
-            Console.WriteLine(configuration.GetSection(JwtTokensOptions.SectionName).Value);
-
             services.Configure<JwtTokensOptions>(configuration.GetSection(JwtTokensOptions.SectionName));
 
             services.AddSingleton<ITokensManager, TokensManager>();
         });
+    }
+
+    protected override IHost CreateHost(IHostBuilder builder)
+    {
+        //     
+        builder.ConfigureHostConfiguration(cfg =>
+        {
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.IntegrationTests.json")
+                .Build();
+
+            cfg.AddConfiguration(configuration);
+        });
+
+        return base.CreateHost(builder);
     }
 
     public async Task InitializeAsync()
