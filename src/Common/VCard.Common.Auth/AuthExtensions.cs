@@ -15,7 +15,7 @@ public static class AuthExtensions
         Action<JwtTokensOptions>? configureOptions = null)
     {
         var jwtConfiguration = configuration
-            .GetRequiredSection(JwtTokensOptions.SectionName)
+            .GetSection(JwtTokensOptions.SectionName)
             .Get<JwtTokensOptions>()!;
 
         configureOptions?.Invoke(jwtConfiguration);
