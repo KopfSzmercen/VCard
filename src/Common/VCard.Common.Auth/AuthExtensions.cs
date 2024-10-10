@@ -24,6 +24,11 @@ public static class AuthExtensions
 
         services.AddAuthorization();
 
+        Console.WriteLine("JWT CONFIGURATION");
+        Console.WriteLine("SigningKey: " + jwtConfiguration.SigningKey);
+        Console.WriteLine("Audience: " + jwtConfiguration.Audience);
+        Console.WriteLine("Issuer: " + jwtConfiguration.Issuer);
+
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
