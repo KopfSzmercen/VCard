@@ -9,8 +9,8 @@ using VCard.Common.Infrastructure;
 using VCard.Cards.Api.Persistence;
 using VCard.Cards.Api.Projections;
 
-
 [assembly: InternalsVisibleTo("VCard.Cards.Tests.Unit")]
+[assembly: InternalsVisibleTo("VCard.Cards.Tests.Integration")]
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,3 +63,5 @@ app.UseHttpsRedirection();
 app.MapCardEndpoints();
 
 await app.RunAsync();
+
+public partial class Program;
