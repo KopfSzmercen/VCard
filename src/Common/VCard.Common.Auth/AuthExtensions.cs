@@ -16,7 +16,13 @@ public static class AuthExtensions
     {
         var jwtConfiguration = configuration
             .GetSection(JwtTokensOptions.SectionName)
-            .Get<JwtTokensOptions>()!;
+            .Get<JwtTokensOptions>();
+
+        var section = configuration
+            .GetSection(JwtTokensOptions.SectionName);
+
+        Console.WriteLine("JWT CONFIGURATION SECTION ");
+        Console.WriteLine(section);
 
         services.Configure<JwtTokensOptions>(configuration.GetSection(JwtTokensOptions.SectionName));
 
