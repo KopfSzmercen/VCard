@@ -18,7 +18,6 @@ public class TestCardsWebApplication : WebApplicationFactory<Program>, IAsyncLif
 {
     private readonly TestPostgresDbContainer _postgresDbContainer = new();
     private readonly TestEventStoreDbContainer _eventStoreDbContainer = new();
-    private IConfiguration? _configuration;
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -34,9 +33,11 @@ public class TestCardsWebApplication : WebApplicationFactory<Program>, IAsyncLif
             {
                 { "EventStore:ConnectionString", _eventStoreDbContainer.ConnectionString }
             }!);
-
-            _configuration = configurationBuilder.Build();
         });
+
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.IntegrationTests.json")
+            .Build();
 
         builder.ConfigureTestServices(services =>
         {
@@ -59,7 +60,7 @@ public class TestCardsWebApplication : WebApplicationFactory<Program>, IAsyncLif
                 configure.UsingInMemory((context, cfg) => { cfg.ConfigureEndpoints(context); });
             });
 
-            services.Configure<JwtTokensOptions>(_configuration!.GetSection(JwtTokensOptions.SectionName));
+            services.Configure<JwtTokensOptions>(configuration.GetSection(JwtTokensOptions.SectionName));
 
             services.AddSingleton<ITokensManager, TokensManager>();
         });
