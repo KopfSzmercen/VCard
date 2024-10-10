@@ -31,7 +31,13 @@ public class TestCardsWebApplication : WebApplicationFactory<Program>, IAsyncLif
             //add event store configuration
             configurationBuilder.AddInMemoryCollection(new Dictionary<string, string>
             {
-                { "EventStore:ConnectionString", _eventStoreDbContainer.ConnectionString }
+                { "EventStore:ConnectionString", _eventStoreDbContainer.ConnectionString },
+                {
+                    "Jwt:SigningKey",
+                    "9c6e116755e3d00729e8746e064b28906208001b75c7cefa19527eb4fa05a29e1cabbb57ea681d75c83da27fcb93c94763730ea47cc8fa4985930bb886185984ab93a8ea762402a06cd4cc0ff303306cff6948c5e53501d177661395d2c54aff943d79576b06fdeade1b95aaed093fd5203b35bb5f36f2d"
+                },
+                { "Jwt:Issuer", "Vcard" },
+                { "Jwt:Audience", "VcardUsers" }
             }!);
         });
 
