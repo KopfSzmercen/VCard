@@ -44,7 +44,7 @@ internal sealed class AddMoneyEndpoint : IEndpoint
         return TypedResults.Ok();
     }
 
-    private sealed record Request(
+    public sealed record Request(
         string Currency,
         int Amount
     );

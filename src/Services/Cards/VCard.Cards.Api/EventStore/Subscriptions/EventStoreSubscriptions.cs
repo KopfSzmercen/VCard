@@ -7,7 +7,7 @@ internal sealed class EventStoreSubscriptions(
     EventStoreClient client,
     IEventStoreEventsProcessor eventsProcessor,
     IServiceScopeFactory serviceScopeFactory
-)
+) : IAsyncDisposable
 {
     private Task? _subscriptionTask;
     private CancellationTokenSource _cts = new();
@@ -25,6 +25,7 @@ internal sealed class EventStoreSubscriptions(
         {
             Checkpoint? lastCheckpoint;
 
+
             await using (var scope = serviceScopeFactory.CreateAsyncScope())
             {
                 var checkpointRepository = scope.ServiceProvider.GetRequiredService<ICheckpointRepository>();
@@ -37,13 +38,13 @@ internal sealed class EventStoreSubscriptions(
                         new Position(lastCheckpoint.Position, lastCheckpoint.Position)
                     )
                     : FromAll.Start,
-                cancellationToken: cancellationToken,
+                cancellationToken: _cts.Token,
                 filterOptions: new SubscriptionFilterOptions(
                     EventTypeFilter.ExcludeSystemEvents()
                 )
             );
 
-            await foreach (var resolvedEvent in subscription)
+            await foreach (var resolvedEvent in subscription.WithCancellation(_cts.Token))
             {
                 var checkpoint = new Checkpoint(
                     SubscriptionId,
@@ -66,12 +67,17 @@ internal sealed class EventStoreSubscriptions(
 
     public async Task StopAsync()
     {
-        if (_subscriptionTask != null)
+        await _cts.CancelAsync();
+        if (_subscriptionTask is not null)
         {
-            await _cts.CancelAsync();
             await _subscriptionTask;
-            _cts.Dispose();
-            _cts = new CancellationTokenSource();
         }
+    }
+
+
+    public async ValueTask DisposeAsync()
+    {
+        await StopAsync();
+        _cts.Dispose();
     }
 }

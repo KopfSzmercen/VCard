@@ -42,7 +42,7 @@ internal class GetCardEndpoint : IEndpoint
         return TypedResults.Ok(card);
     }
 
-    private sealed record Response(
+    public sealed record Response(
         Guid Id,
         Guid UserId,
         string Currency,

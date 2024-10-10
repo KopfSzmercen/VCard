@@ -13,6 +13,8 @@ internal sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbC
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
         base.OnModelCreating(builder);
 
         builder.HasDefaultSchema("cards");

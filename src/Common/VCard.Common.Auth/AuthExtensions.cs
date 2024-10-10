@@ -15,12 +15,25 @@ public static class AuthExtensions
         Action<JwtTokensOptions>? configureOptions = null)
     {
         var jwtConfiguration = configuration
-            .GetRequiredSection(JwtTokensOptions.SectionName)
-            .Get<JwtTokensOptions>()!;
+            .GetSection(JwtTokensOptions.SectionName)
+            .Get<JwtTokensOptions>();
+
+        var section = configuration
+            .GetSection(JwtTokensOptions.SectionName);
+
+        Console.WriteLine("JWT CONFIGURATION SECTION ");
+        Console.WriteLine(section.Value);
+
+        services.Configure<JwtTokensOptions>(configuration.GetSection(JwtTokensOptions.SectionName));
 
         configureOptions?.Invoke(jwtConfiguration);
 
         services.AddAuthorization();
+
+        Console.WriteLine("JWT CONFIGURATION");
+        Console.WriteLine("SigningKey: " + jwtConfiguration.SigningKey);
+        Console.WriteLine("Audience: " + jwtConfiguration.Audience);
+        Console.WriteLine("Issuer: " + jwtConfiguration.Issuer);
 
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
