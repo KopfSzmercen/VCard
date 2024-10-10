@@ -22,7 +22,7 @@ public static class AuthExtensions
             .GetSection(JwtTokensOptions.SectionName);
 
         Console.WriteLine("JWT CONFIGURATION SECTION ");
-        Console.WriteLine(section);
+        Console.WriteLine(section.Value);
 
         services.Configure<JwtTokensOptions>(configuration.GetSection(JwtTokensOptions.SectionName));
 
