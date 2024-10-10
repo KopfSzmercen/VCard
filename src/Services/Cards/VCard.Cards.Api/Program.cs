@@ -27,7 +27,7 @@ builder.Services.AddEventStore(builder.Configuration);
 builder.Services.AddEventBusWithTransport(
     [ConsumersRegistry.ConfigureConsumers],
     "Communication",
-    builder.Configuration.GetRequiredSection(RabbitMqConfiguration.SectionName)
+    builder.Configuration.GetSection(RabbitMqConfiguration.SectionName)
         .Get<RabbitMqConfiguration>()!
 );
 

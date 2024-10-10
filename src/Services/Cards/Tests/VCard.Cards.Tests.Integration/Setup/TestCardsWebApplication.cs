@@ -22,7 +22,7 @@ public class TestCardsWebApplication : WebApplicationFactory<Program>, IAsyncLif
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureAppConfiguration((ctx, configurationBuilder) =>
+        builder.ConfigureAppConfiguration((_, configurationBuilder) =>
         {
             var configurationPath = Path.Combine(Directory.GetCurrentDirectory(),
                 "appsettings.IntegrationTests.json");
