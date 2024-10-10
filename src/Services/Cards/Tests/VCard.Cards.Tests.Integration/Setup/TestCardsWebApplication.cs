@@ -60,6 +60,9 @@ public class TestCardsWebApplication : WebApplicationFactory<Program>, IAsyncLif
                 configure.UsingInMemory((context, cfg) => { cfg.ConfigureEndpoints(context); });
             });
 
+            Console.WriteLine("JWT CONFIGURATION INTEGRATION TESTS");
+            Console.WriteLine(configuration.GetSection(JwtTokensOptions.SectionName).Value);
+
             services.Configure<JwtTokensOptions>(configuration.GetSection(JwtTokensOptions.SectionName));
 
             services.AddSingleton<ITokensManager, TokensManager>();
