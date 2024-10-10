@@ -18,6 +18,8 @@ public static class AuthExtensions
             .GetSection(JwtTokensOptions.SectionName)
             .Get<JwtTokensOptions>()!;
 
+        services.Configure<JwtTokensOptions>(configuration.GetSection(JwtTokensOptions.SectionName));
+
         configureOptions?.Invoke(jwtConfiguration);
 
         services.AddAuthorization();
