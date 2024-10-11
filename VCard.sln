@@ -40,6 +40,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9AD272CB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VCard.Cards.Tests.Unit", "src\Services\Cards\Tests\VCard.Cards.Tests.Unit\VCard.Cards.Tests.Unit.csproj", "{C297E69E-0104-4E59-B5AF-BA026183C415}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VCard.Cards.Tests.Integration", "src\Services\Cards\Tests\VCard.Cards.Tests.Integration\VCard.Cards.Tests.Integration.csproj", "{22F57204-DD4C-4634-809C-94CF2127CAC4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +96,10 @@ Global
 		{C297E69E-0104-4E59-B5AF-BA026183C415}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C297E69E-0104-4E59-B5AF-BA026183C415}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C297E69E-0104-4E59-B5AF-BA026183C415}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22F57204-DD4C-4634-809C-94CF2127CAC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22F57204-DD4C-4634-809C-94CF2127CAC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22F57204-DD4C-4634-809C-94CF2127CAC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22F57204-DD4C-4634-809C-94CF2127CAC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0BDE3D4C-3BC8-4711-BE56-1525FF6435DB} = {7DEF3D65-0E9F-4259-A912-8C65C2DB29EE}
@@ -114,5 +120,6 @@ Global
 		{4BA7BCEB-61F9-4DFE-B6D4-56AE358174CB} = {0BDE3D4C-3BC8-4711-BE56-1525FF6435DB}
 		{9AD272CB-0291-418B-8E47-A2FECE641627} = {1F5ED096-F9D7-449B-98BF-4B1BD6BA4E58}
 		{C297E69E-0104-4E59-B5AF-BA026183C415} = {9AD272CB-0291-418B-8E47-A2FECE641627}
+		{22F57204-DD4C-4634-809C-94CF2127CAC4} = {9AD272CB-0291-418B-8E47-A2FECE641627}
 	EndGlobalSection
 EndGlobal

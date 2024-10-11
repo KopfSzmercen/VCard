@@ -13,7 +13,7 @@ internal sealed class WithdrawMoneyEndpoint : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
     {
-        app.MapDelete("/money", Handle)
+        app.MapPut("/money/withdraw", Handle)
             .WithSummary("Withdraw money from card")
             .WithRequestValidation<RequestValidator>()
             .RequireAuthorization();
@@ -45,7 +45,7 @@ internal sealed class WithdrawMoneyEndpoint : IEndpoint
         return TypedResults.Ok();
     }
 
-    private sealed record Request(
+    public sealed record Request(
         string Currency,
         int Amount
     );

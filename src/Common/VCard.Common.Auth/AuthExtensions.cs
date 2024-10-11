@@ -15,10 +15,13 @@ public static class AuthExtensions
         Action<JwtTokensOptions>? configureOptions = null)
     {
         var jwtConfiguration = configuration
-            .GetRequiredSection(JwtTokensOptions.SectionName)
-            .Get<JwtTokensOptions>()!;
+            .GetSection(JwtTokensOptions.SectionName)
+            .Get<JwtTokensOptions>();
 
-        configureOptions?.Invoke(jwtConfiguration);
+        services.Configure<JwtTokensOptions>
+            (configuration.GetRequiredSection(JwtTokensOptions.SectionName));
+
+        configureOptions?.Invoke(jwtConfiguration!);
 
         services.AddAuthorization();
 
@@ -28,7 +31,7 @@ public static class AuthExtensions
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfiguration.SigningKey)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfiguration!.SigningKey)),
                     ValidAudience = jwtConfiguration.Audience,
                     ValidIssuer = jwtConfiguration.Issuer
                 };
