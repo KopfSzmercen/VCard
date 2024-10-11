@@ -69,7 +69,6 @@ public class TestCardsWebApplication : WebApplicationFactory<Program>, IAsyncLif
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        //     
         builder.ConfigureHostConfiguration(cfg =>
         {
             var configuration = new ConfigurationBuilder()

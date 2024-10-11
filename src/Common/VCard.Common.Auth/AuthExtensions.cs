@@ -18,22 +18,12 @@ public static class AuthExtensions
             .GetSection(JwtTokensOptions.SectionName)
             .Get<JwtTokensOptions>();
 
-        var section = configuration
-            .GetSection(JwtTokensOptions.SectionName);
+        services.Configure<JwtTokensOptions>
+            (configuration.GetRequiredSection(JwtTokensOptions.SectionName));
 
-        Console.WriteLine("JWT CONFIGURATION SECTION ");
-        Console.WriteLine(section.Value);
-
-        services.Configure<JwtTokensOptions>(configuration.GetSection(JwtTokensOptions.SectionName));
-
-        configureOptions?.Invoke(jwtConfiguration);
+        configureOptions?.Invoke(jwtConfiguration!);
 
         services.AddAuthorization();
-
-        Console.WriteLine("JWT CONFIGURATION");
-        Console.WriteLine("SigningKey: " + jwtConfiguration.SigningKey);
-        Console.WriteLine("Audience: " + jwtConfiguration.Audience);
-        Console.WriteLine("Issuer: " + jwtConfiguration.Issuer);
 
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -41,7 +31,7 @@ public static class AuthExtensions
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfiguration.SigningKey)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfiguration!.SigningKey)),
                     ValidAudience = jwtConfiguration.Audience,
                     ValidIssuer = jwtConfiguration.Issuer
                 };
