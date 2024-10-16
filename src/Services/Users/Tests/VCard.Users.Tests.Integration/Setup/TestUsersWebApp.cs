@@ -25,6 +25,7 @@ public class UserIntegrationTestsBase : IAsyncLifetime
 
     public async Task DisposeAsync()
     {
+        await App.DisposeAsync();
         await _testDatabaseContainer.DisposeAsync();
     }
 
