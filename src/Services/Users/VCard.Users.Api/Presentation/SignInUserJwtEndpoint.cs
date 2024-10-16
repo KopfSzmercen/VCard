@@ -52,7 +52,11 @@ internal sealed class SignInUserJwtEndpoint : IEndpoint
             user.Id,
             userRoles.ToList(),
             //Temporary solution to add ManageCards claim
-            [..userClaims.ToList(), new Claim("ManageCards", true.ToString())]
+            [
+                ..userClaims.ToList(),
+                new Claim("ManageCards", true.ToString()),
+                new Claim("SendEmails", true.ToString())
+            ]
         );
 
         return TypedResults.Ok(new Response(token.AccessToken));

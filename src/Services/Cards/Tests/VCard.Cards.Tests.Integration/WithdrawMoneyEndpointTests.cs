@@ -40,7 +40,6 @@ public class WithdrawMoneyEndpointTests(
         await client.PostAsJsonAsync("/cards/money",
             new AddMoneyEndpoint.Request(Money.AvailableCurrencies[0], moneyToAdd));
 
-
         // Act
         var withdrawMoneyResponse =
             await client.PutAsJsonAsync("/cards/money/withdraw",

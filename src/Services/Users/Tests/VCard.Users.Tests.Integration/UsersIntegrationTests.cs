@@ -108,4 +108,49 @@ public class UsersIntegrationTests : UserIntegrationTestsBase
         getMeResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         getMeResponseContent!.Email.Should().Be(signInRequest.Email);
     }
+
+    [Fact]
+    public async Task GivenUserSignIn_UpdateAccount_ShouldReturnNoContent_AndGetMe_ShouldReturnAccountData()
+    {
+        // Arrange
+        var client = App.WithTestEventBus().CreateClient();
+
+        var request = new RegisterUserEndpoint.Request
+        {
+            Email = "test@t.pl",
+            Password = "password"
+        };
+
+        await client.PostAsJsonAsync(UsersEndpoints.BaseUrl, request);
+
+        var signInRequest = new SignInUserEndpoint.Reuqest
+        {
+            Email = "test@t.pl",
+            Password = "password"
+        };
+
+        await client.PostAsJsonAsync($"{UsersEndpoints.BaseUrl}/sign-in", signInRequest);
+
+        var updateAccountRequest = new UpdateAccountEndpoint.Request
+        {
+            Address = "Test address",
+            Username = "Test username"
+        };
+
+        // Act
+        var updateAccountResponse =
+            await client.PutAsJsonAsync($"{UsersEndpoints.BaseUrl}/account", updateAccountRequest);
+
+        // Assert
+        updateAccountResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        var getMeResponse = await client.GetAsync($"{UsersEndpoints.BaseUrl}/me");
+
+        var getMeResponseContent = await getMeResponse.Content.ReadFromJsonAsync<GetMeEndpoint.Response>();
+
+        getMeResponseContent!.Account.Should().NotBeNull();
+
+        getMeResponseContent!.Account!.Username.Should().Be(updateAccountRequest.Username);
+        getMeResponseContent!.Account!.Address.Should().Be(updateAccountRequest.Address);
+    }
 }

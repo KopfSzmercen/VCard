@@ -5,7 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuth(builder.Configuration);
 
 builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("ManageCards", policy => policy.RequireClaim("ManageCards", true.ToString()));
+    .AddPolicy("ManageCards", policy => policy.RequireClaim("ManageCards", true.ToString()))
+    .AddPolicy("SendEmails", policy => policy.RequireClaim("SendEmails", true.ToString()));
 
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));

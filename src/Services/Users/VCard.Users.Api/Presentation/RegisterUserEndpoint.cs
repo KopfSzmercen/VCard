@@ -83,7 +83,10 @@ internal class RegisterUserEndpoint : IEndpoint
         }
 
         await userManager.AddToRolesAsync(user, [UserRole.User]);
-        await userManager.AddClaimsAsync(user, [new Claim("id", user.Id.ToString())]);
+        await userManager.AddClaimsAsync(user, [
+            new Claim("UserId", user.Id.ToString()),
+            new Claim("SendEmails", true.ToString())
+        ]);
 
         return new RegisterUserResult(null, user.Id);
     }

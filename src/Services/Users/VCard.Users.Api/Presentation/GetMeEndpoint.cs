@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using VCard.Common.Application.RequestContext;
 using VCard.Common.Presentation.Endpoints;
 using VCard.Users.Api.Persistence;
 
@@ -17,14 +18,30 @@ internal class GetMeEndpoint : IEndpoint
     }
 
     private static async Task<Results<NoContent, Ok<Response>>> Handle(
-        [FromServices] UserManager<User> userManager,
-        [FromServices] IHttpContextAccessor httpContextAccessor
+        [FromServices] AppDbContext dbContext,
+        [FromServices] IRequestContext requestContext
     )
     {
-        var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext!.User);
+        var user = await dbContext
+            .Users
+            .Where(x => x.Id == requestContext.Id)
+            .Include(x => x.UserAccount)
+            .Select(x => new Response(
+                x.Email!,
+                x.UserName!,
+                x.UserAccount == null
+                    ? null
+                    : new AccountResponse(
+                        x.UserAccount.Username,
+                        x.UserAccount.Address
+                    )
+            ))
+            .FirstOrDefaultAsync();
 
-        return TypedResults.Ok(new Response(user!.Email!, user.UserName!));
+        return TypedResults.Ok(user!);
     }
 
-    public sealed record Response(string Email, string Username);
+    public sealed record Response(string Email, string Username, AccountResponse? Account = null);
+
+    public sealed record AccountResponse(string Username, string Address);
 }

@@ -69,6 +69,14 @@ services:
       RABBITMQ_DEFAULT_PASS: vcard
       RABBITMQ_DEFAULT_VHOST: vcard
   
+  consul:
+    image: hashicorp/consul:latest
+    container_name: VCard.Consul
+    ports:
+      - 8500:8500
+    volumes:
+      - ./containers/consul/data:/consul/data
+  
   vcard.eventstoredb:
     image: eventstore/eventstore:24.2.0-jammy
     environment:
