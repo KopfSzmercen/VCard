@@ -1,4 +1,7 @@
 using FluentValidation;
+using Steeltoe.Discovery.Client;
+using Steeltoe.Discovery.Consul;
+using VCard.Common.Application.RequestContext;
 using VCard.Common.Infrastructure;
 using VCard.Users.Api;
 using VCard.Users.Api.Auth;
@@ -12,6 +15,8 @@ builder.Services.AddSwagger();
 
 builder.Services.AddAuth();
 
+builder.Services.AddRequestContext();
+
 builder.Services.AddPersistence(builder.Configuration);
 
 builder.Services.AddValidatorsFromAssemblyContaining<VCard.Users.Api.Program>(includeInternalTypes: true);
@@ -22,6 +27,8 @@ builder.Services.AddEventBusWithTransport<AppDbContext>(
     builder.Configuration.GetSection("RabbitMq").Get<RabbitMqConfiguration>()!,
     true
 );
+
+builder.Services.AddServiceDiscovery(o => o.UseConsul());
 
 var app = builder.Build();
 
@@ -39,6 +46,7 @@ await app.ApplyMigrations();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRequestContext();
 
 await app.RunAsync();
 

@@ -16,6 +16,7 @@ internal sealed class AppDbContext(DbContextOptions<AppDbContext> options) :
 
 {
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
+    public DbSet<UserAccount> UserAccount { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -26,5 +27,19 @@ internal sealed class AppDbContext(DbContextOptions<AppDbContext> options) :
         builder.AddInboxStateEntity();
         builder.AddOutboxMessageEntity();
         builder.AddOutboxStateEntity();
+
+        ConfigureUserAccount(builder);
+    }
+
+    private static void ConfigureUserAccount(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<UserAccount>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.HasOne(e => e.User)
+                .WithOne(e => e.UserAccount)
+                .HasForeignKey<UserAccount>(e => e.UserId);
+        });
     }
 }

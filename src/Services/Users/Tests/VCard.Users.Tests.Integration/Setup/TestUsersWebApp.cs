@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
+using Steeltoe.Common.Http.Discovery;
 using VCard.Users.Api.Persistence;
 
 namespace VCard.Users.Tests.Integration.Setup;
@@ -43,9 +46,22 @@ public class UserIntegrationTestsBase : IAsyncLifetime
                 services.Remove(
                     services.SingleOrDefault(x => x.ServiceType == typeof(DbContextOptions<AppDbContext>))!
                 );
-
                 services.AddDbContext<AppDbContext>(options => { options.UseNpgsql(databaseConnectionString); });
             });
+        }
+
+        protected override IHost CreateHost(IHostBuilder builder)
+        {
+            builder.ConfigureHostConfiguration(cfg =>
+            {
+                var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.IntegrationTests.json")
+                    .Build();
+
+                cfg.AddConfiguration(configuration);
+            });
+
+            return base.CreateHost(builder);
         }
     }
 }

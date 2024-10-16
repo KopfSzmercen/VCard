@@ -17,6 +17,8 @@ internal static class UsersEndpoints
             .MapEndpoint<RegisterUserEndpoint>()
             .MapEndpoint<SignInUserEndpoint>()
             .MapEndpoint<GetMeEndpoint>()
-            .MapEndpoint<SignInUserJwtEndpoint>();
+            .MapEndpoint<SignInUserJwtEndpoint>()
+            .MapEndpoint<UpdateAccountEndpoint>()
+            .MapEndpoint<GetUserAccountEndpoint>();
     }
 }

@@ -13,7 +13,8 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.8"/>
+        <PackageReference Include="Steeltoe.Discovery.Consul" Version="3.2.8"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
@@ -24,7 +25,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\Common\VCard.Common.Auth\VCard.Common.Auth.csproj"/>
         <ProjectReference Include="..\..\..\Common\VCard.Common.Infrastructure\VCard.Common.Infrastructure.csproj"/>
+        <ProjectReference Include="..\..\..\Common\VCard.Common.Presentation\VCard.Common.Presentation.csproj"/>
         <ProjectReference Include="..\..\Users\VCard.Users.IntegrationEvents\VCard.Users.IntegrationEvents.csproj"/>
     </ItemGroup>
 
