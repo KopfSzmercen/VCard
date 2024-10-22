@@ -192,6 +192,33 @@ namespace VCard.Communication.Api.Persistence.Migrations
 
                     b.ToTable("OutboxState", "communication");
                 });
+
+            modelBuilder.Entity("VCard.Communication.Api.Saga.EmailSendingSagaData", b =>
+                {
+                    b.Property<Guid>("CorrelationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CurrentState")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("EmailSent")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("MoneyWithdrawn")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("WithdrawMoneyConfirmationEmailSent")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("CorrelationId");
+
+                    b.ToTable("EmailSendingSagaData", "communication");
+                });
 #pragma warning restore 612, 618
         }
     }

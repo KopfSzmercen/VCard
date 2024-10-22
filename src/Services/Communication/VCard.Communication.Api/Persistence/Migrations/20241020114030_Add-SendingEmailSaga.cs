@@ -7,13 +7,30 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace VCard.Communication.Api.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class AddSendingEmailSaga : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
                 name: "communication");
+
+            migrationBuilder.CreateTable(
+                name: "EmailSendingSagaData",
+                schema: "communication",
+                columns: table => new
+                {
+                    CorrelationId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CurrentState = table.Column<string>(type: "text", nullable: false),
+                    SenderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EmailSent = table.Column<bool>(type: "boolean", nullable: false),
+                    MoneyWithdrawn = table.Column<bool>(type: "boolean", nullable: false),
+                    WithdrawMoneyConfirmationEmailSent = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailSendingSagaData", x => x.CorrelationId);
+                });
 
             migrationBuilder.CreateTable(
                 name: "InboxState",
@@ -131,6 +148,10 @@ namespace VCard.Communication.Api.Persistence.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "EmailSendingSagaData",
+                schema: "communication");
+
             migrationBuilder.DropTable(
                 name: "InboxState",
                 schema: "communication");

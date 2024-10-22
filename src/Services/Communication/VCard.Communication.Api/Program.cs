@@ -1,7 +1,9 @@
 using System.Runtime.CompilerServices;
+using MassTransit;
 using Steeltoe.Common.Http.Discovery;
 using Steeltoe.Discovery.Client;
 using Steeltoe.Discovery.Consul;
+using VCard.Cards.IntegrationEvents;
 using VCard.Common.Application.RequestContext;
 using VCard.Common.Auth;
 using VCard.Common.Infrastructure;
@@ -9,8 +11,11 @@ using VCard.Communication.Api;
 using VCard.Communication.Api.EmailSender;
 using VCard.Communication.Api.Persistence;
 using VCard.Communication.Api.Presentation;
+using VCard.Communication.Api.Saga;
+using VCard.Communication.IntegrationEvents;
 
 [assembly: InternalsVisibleTo("VCard.Communication.Tests.Integration")]
+[assembly: InternalsVisibleTo("VCard.Communication.Tests.Unit")]
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,11 +31,13 @@ builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 builder.Services.AddPersistence(builder.Configuration);
 
-builder.Services.AddEventBusWithTransport<AppDbContext>(
+builder.Services.AddEventBusWithTransport(
     [ConsumersRegistry.ConfigureConsumers],
     "Communication",
     builder.Configuration.GetRequiredSection("RabbitMq").Get<RabbitMqConfiguration>()!,
-    true
+    [
+        EmailSendingSaga.Register()
+    ]
 );
 
 builder.Services.RegisterIntegrationEventsHandlers(

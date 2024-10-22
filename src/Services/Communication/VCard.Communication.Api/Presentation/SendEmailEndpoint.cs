@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using MassTransit;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using VCard.Common.Application.RequestContext;
 using VCard.Common.Presentation.Endpoints;
 using VCard.Communication.Api.EmailSender;
+using VCard.Communication.IntegrationEvents;
 
 namespace VCard.Communication.Api.Presentation;
 
@@ -40,7 +42,8 @@ internal sealed class SendEmailEndpoint : IEndpoint
         [FromServices] IEmailSender emailSender,
         [FromServices] IRequestContext requestContext,
         [FromServices] Client client,
-        [FromBody] Request request
+        [FromBody] Request request,
+        [FromServices] IBus bus
     )
     {
         //Simulate that I need current user data to send the email - I have to communicate with another service
@@ -54,6 +57,11 @@ internal sealed class SendEmailEndpoint : IEndpoint
             request.Subject,
             request.Body
         );
+
+        await bus.Publish(new EmailSent(
+            Guid.NewGuid(),
+            requestContext.Id!.Value
+        ));
 
         return TypedResults.Ok();
     }
