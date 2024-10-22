@@ -28,7 +28,8 @@ builder.Services.AddEventBusWithTransport(
     [ConsumersRegistry.ConfigureConsumers],
     "Communication",
     builder.Configuration.GetSection(RabbitMqConfiguration.SectionName)
-        .Get<RabbitMqConfiguration>()!
+        .Get<RabbitMqConfiguration>()!,
+    []
 );
 
 builder.Services.RegisterIntegrationEventsHandlers(

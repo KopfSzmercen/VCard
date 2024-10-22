@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using VCard.Cards.Api.Presentation;
 using VCard.Common.Infrastructure.Consumers;
 using VCard.Users.IntegrationEvents;
 
@@ -10,5 +11,8 @@ internal static class ConsumersRegistry
     {
         registrationConfigurator
             .AddConsumer<IntegrationEventConsumer<UserRegistered>>();
+
+        registrationConfigurator
+            .AddConsumer<WithdrawMoneyOnEmailSentHandler>();
     }
 }

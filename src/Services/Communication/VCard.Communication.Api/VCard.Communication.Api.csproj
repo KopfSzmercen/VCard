@@ -28,7 +28,9 @@
         <ProjectReference Include="..\..\..\Common\VCard.Common.Auth\VCard.Common.Auth.csproj"/>
         <ProjectReference Include="..\..\..\Common\VCard.Common.Infrastructure\VCard.Common.Infrastructure.csproj"/>
         <ProjectReference Include="..\..\..\Common\VCard.Common.Presentation\VCard.Common.Presentation.csproj"/>
+        <ProjectReference Include="..\..\Cards\VCard.Cards.IntegrationEvents\VCard.Cards.IntegrationEvents.csproj"/>
         <ProjectReference Include="..\..\Users\VCard.Users.IntegrationEvents\VCard.Users.IntegrationEvents.csproj"/>
+        <ProjectReference Include="..\VCard.Communication.IntegrationEvents\VCard.Communication.IntegrationEvents.csproj"/>
     </ItemGroup>
 
 </Project>
